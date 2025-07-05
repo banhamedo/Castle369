@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الجلسات | جاسمين عبد العزيز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    body {
+      background: linear-gradient(120deg, #e6f9e0 60%, #fff 100%);
+      color: #2e4d1c;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 16px 60px 16px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(86,171,47,0.08);
+      margin-top: 40px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      color: #56ab2f;
+      font-weight: 700;
+    }
+    .sessions-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 36px 32px;
+      justify-content: center;
+    }
+    .session-icon-card {
+      background: linear-gradient(120deg, #f7fff3 70%, #e6f9e0 100%);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(86,171,47,0.10);
+      width: 160px;
+      height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative;
+      font-size: 3.2rem;
+      font-weight: bold;
+      color: #56ab2f;
+      border: 3px solid #e6f9e0;
+      overflow: hidden;
+    }
+    .session-icon-img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 8px;
+      background: #e6f9e0;
+      box-shadow: 0 2px 8px rgba(86,171,47,0.08);
+      display: block;
+    }
+    .session-icon-card:hover {
+      box-shadow: 0 8px 32px rgba(86,171,47,0.13);
+      transform: translateY(-4px) scale(1.04);
+      border-color: #a8e063;
+    }
+    .session-icon-label {
+      font-size: 1.1rem;
+      color: #2e4d1c;
+      margin-top: 10px;
+      text-align: center;
+      font-weight: 600;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(34,49,63,0.25);
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 22px;
+      max-width: 480px;
+      width: 96vw;
+      padding: 32px 20px 24px 20px;
+      box-shadow: 0 12px 48px rgba(34,49,63,0.18), 0 2px 8px rgba(86,171,47,0.10);
+      position: relative;
+      animation: fadein-session 0.7s;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .modal-img {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 18px;
+      background: #e6f9e0;
+      box-shadow: 0 2px 12px rgba(86,171,47,0.10);
+      display: block;
+    }
+    .modal-close {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      font-size: 1.7rem;
+      color: #a8e063;
+      background: #f7fff3;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(86,171,47,0.08);
+      transition: color 0.2s, background 0.2s;
+      z-index: 2;
+    }
+    .modal-close:hover { color: #fff; background: #56ab2f; }
+    .modal-title {
+      font-size: 1.4rem;
+      color: #56ab2f;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      justify-content: center;
+      text-align: center;
+    }
+    .modal-emoji {
+      font-size: 2.2rem;
+      vertical-align: middle;
+    }
+    .modal-desc, .modal-quote, .modal-features, .modal-testimonials, .modal-cta {
+      width: 100%;
+    }
+    .modal-desc {
+      font-size: 1.08rem;
+      margin-bottom: 12px;
+      color: #2e4d1c;
+      text-align: center;
+    }
+    .modal-quote {
+      background: #e6f9e0;
+      border-right: 5px solid #a8e063;
+      padding: 10px 14px;
+      margin: 10px 0 14px 0;
+      border-radius: 10px;
+      font-style: italic;
+      color: #2e4d1c;
+      font-size: 1.01rem;
+      text-align: center;
+    }
+    .modal-features {
+      margin-bottom: 12px;
+      padding-right: 0;
+    }
+    .modal-features li {
+      margin-bottom: 7px;
+      font-size: 1.01rem;
+      position: relative;
+      padding-right: 26px;
+    }
+    .modal-features li:before {
+      content: '✅';
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 1em;
+      color: #56ab2f;
+    }
+    .modal-testimonials {
+      margin: 10px 0 0 0;
+    }
+    .modal-testimonial {
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 7px;
+      box-shadow: 0 1px 4px rgba(168,224,99,0.07);
+      font-size: 0.98rem;
+      color: #2e4d1c;
+    }
+    .modal-cta {
+      margin-top: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .modal-btn {
+      background: linear-gradient(90deg, #56ab2f 40%, #a8e063 100%);
+      color: #fff;
+      font-size: 1.08rem;
+      padding: 10px 28px;
+      border-radius: 30px;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 4px 16px rgba(86,171,47,0.13);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+      animation: pulse 1.5s infinite;
+    }
+    .modal-btn:hover {
+      background: linear-gradient(90deg, #a8e063 0%, #56ab2f 100%);
+      transform: scale(1.04);
+    }
+    @media (max-width: 700px) {
+      .container {
+        margin-top: 10px;
+        padding: 10px 2px 30px 2px;
+      }
+      .sessions-grid {
+        flex-direction: column;
+        gap: 24px;
+      }
+      .session-icon-card {
+        width: 98vw;
+        height: 90px;
+        font-size: 2.1rem;
+      }
+      .modal-content {
+        padding: 10px 2px 14px 2px;
+      }
+      .modal-title { font-size: 1.1rem; }
+      .modal-btn { font-size: 0.98rem; padding: 10px 0; width: 90vw; }
+      .modal-img { width: 70px; height: 70px; margin-bottom: 10px; }
+    }
+    .navbar {
+      background: rgba(34, 49, 63, 0.95);
+      color: #fff;
+      padding: 0.5rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .navbar-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #a8e063;
+    }
+    .navbar-links {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+    }
+    .navbar-links li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+    .navbar-links li a:hover {
+      color: #a8e063;
+    }
+    @media (max-width: 700px) {
+      .navbar-container { flex-direction: column; gap: 10px; }
+      .navbar-links { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar احترافي -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <span class="navbar-logo">جاسمين عبد العزيز</span>
+      <ul class="navbar-links">
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="sessions.html">الجلسات</a></li>
+        <li><a href="#book">عن الكتاب</a></li>
+        <li><a href="#contact">تواصل</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>أنواع الجلسات</h1>
+    <div class="sessions-grid" id="sessionsGrid"></div>
+    <div id="modalsContainer"></div>
+  </div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHSZQpsIu_KeE0EqVPhSEj8GzDh42-dPc",
+      authDomain: "b-pr-6c81e.firebaseapp.com",
+      databaseURL: "https://b-pr-6c81e-default-rtdb.firebaseio.com",
+      projectId: "b-pr-6c81e",
+      storageBucket: "b-pr-6c81e.appspot.com",
+      messagingSenderId: "343970150309",
+      appId: "1:343970150309:web:f4a2e070cc62e8dc631a4c",
+      measurementId: "G-B27XKG94Z1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function renderSessions() {
+      db.ref('sessions').on('value', snapshot => {
+        const grid = document.getElementById('sessionsGrid');
+        const modals = document.getElementById('modalsContainer');
+        grid.innerHTML = '';
+        modals.innerHTML = '';
+        const sessions = [];
+        snapshot.forEach(child => {
+          sessions.push(child.val());
+        });
+        if (!sessions.length) {
+          grid.innerHTML = '<div style="text-align:center;width:100%;color:#888;font-size:1.2rem;">لا توجد جلسات متاحة حالياً</div>';
+          return;
+        }
+        sessions.forEach((s, i) => {
+          grid.innerHTML += `
+            <div class="session-icon-card" onclick="openModal(${i})">
+              <img class="session-icon-img" src="${s.img || 'sessions-images/default.webp'}" alt="${s.title}" onerror="this.src='sessions-images/default.webp'">
+              <div class="session-icon-label">${s.title}</div>
+            </div>
+          `;
+          modals.innerHTML += `
+            <div id="modal${i}" class="modal"><div class="modal-content">
+              <button class="modal-close" onclick="closeModal(${i})">&times;</button>
+              <img class="modal-img" src="${s.img || 'sessions-images/default.webp'}" alt="${s.title}" onerror="this.src='sessions-images/default.webp'">
+              <div class="modal-title">${s.title}</div>
+              <div class="modal-desc">${s.desc || ''}</div>
+              <div class="modal-cta"><a class="modal-btn" href="${s.link || '#'}" target="_blank">احجز الآن</a></div>
+            </div></div>
+          `;
+        });
+      });
+    }
+    function openModal(idx) {
+      document.getElementById('modal'+idx).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(idx) {
+      document.getElementById('modal'+idx).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      renderSessions();
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+          e.target.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جاسمين عبد العزيز - معالج احترافي لتحرير المشاعر</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: #fff7f4;
+      color: #5a4b4b;
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #a8e063, #56ab2f);
+      color: #2e4d1c;
+      text-align: center;
+      padding: 40px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .profile-image-wrapper {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 5px solid #fff;
+      margin: 0 auto 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .section {
+      padding: 60px 20px;
+      background-color: #fff7f4;
+    }
+
+    .section:nth-child(even) {
+      background-color: #e6f9e0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #5a4b4b;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background-color: #a8e063;
+      margin: 15px auto 0;
+    }
+
+    .book-content img {
+      max-width: 300px;
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .book-details, .target-audience {
+      margin-top: 30px;
+      background: #d0f5c7;
+      padding: 30px;
+      border-radius: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding-right: 20px;
+    }
+
+    ul li::before {
+      content: '✔';
+      margin-left: 10px;
+      color: #56ab2f;
+    }
+
+    .download-form {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: 30px auto;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-control:focus {
+      border-color: #f8c8dc;
+      outline: none;
+    }
+
+    .btn {
+      background-color: #a8e063;
+      color: #2e4d1c;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #56ab2f;
+    }
+
+    .testimonials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .testimonial {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .testimonial-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      background-color: #2e4d1c;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .testimonial {
+        width: 100%;
+      }
+    }
+    .ll{
+      background-color: #56ab2f;
+        color: white;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        display: inline-block;
+    }
+     .hh {
+      background-color: #56ab2f;
+      width: 130px;
+      margin-bottom: 20px;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background: rgba(34, 49, 63, 0.95);
+      color: #fff;
+      padding: 0.5rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .navbar-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #a8e063;
+    }
+    .navbar-links {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+    }
+    .navbar-links li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+    .navbar-links li a:hover {
+      color: #a8e063;
+    }
+    /* Header Glow Effect */
+    .profile-glow {
+      box-shadow: 0 0 0 8px #a8e06344, 0 0 30px 0 #56ab2f88;
+      transition: box-shadow 0.3s;
+    }
+    .profile-glow:hover {
+      box-shadow: 0 0 0 12px #a8e06366, 0 0 50px 0 #56ab2faa;
+    }
+    .header-cta {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-catch {
+      font-size: 1.2rem;
+      color: #2e4d1c;
+      background: #e6f9e0;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(168,224,99,0.08);
+    }
+    .header-btn {
+      background: linear-gradient(90deg, #56ab2f 40%, #a8e063 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 12px 32px;
+      border-radius: 30px;
+      font-weight: bold;
+      margin-top: 5px;
+      box-shadow: 0 4px 16px rgba(86,171,47,0.13);
+      border: none;
+      transition: background 0.3s, transform 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .header-btn:hover {
+      background: linear-gradient(90deg, #a8e063 0%, #56ab2f 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+    @media (max-width: 700px) {
+      .navbar-container { flex-direction: column; gap: 10px; }
+      .navbar-links { flex-direction: column; gap: 10px; }
+      .header-catch { font-size: 1rem; padding: 6px 10px; }
+      .header-btn { font-size: 1rem; padding: 10px 18px; }
+    }
+    .testimonials-slider {
+      position: relative;
+      max-width: 350px;
+      margin: 0 auto;
+      min-height: 320px;
+    }
+    .testimonial {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.7s, transform 0.7s;
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(86,171,47,0.10);
+      max-width: 350px;
+      text-align: center;
+      z-index: 1;
+      transform: scale(0.98);
+    }
+    .testimonial.active {
+      display: block;
+      opacity: 1;
+      position: relative;
+      z-index: 2;
+      transform: scale(1);
+    }
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #a8e063;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(86,171,47,0.13);
+      transition: background 0.2s;
+      z-index: 3;
+    }
+    .slider-arrow.prev { left: -50px; }
+    .slider-arrow.next { right: -50px; }
+    .slider-arrow:hover { background: #56ab2f; }
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e6f9e0;
+      border: 2px solid #a8e063;
+      cursor: pointer;
+      transition: background 0.2s, border 0.2s;
+    }
+    .dot.active {
+      background: #a8e063;
+      border: 2px solid #56ab2f;
+    }
+    /* Pulse effect for CTA */
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 #a8e06355; }
+      70% { box-shadow: 0 0 0 16px #a8e06300; }
+      100% { box-shadow: 0 0 0 0 #a8e06300; }
+    }
+    /* Footer Social Icons */
+    .footer-social {
+      margin-bottom: 12px;
+    }
+    .footer-icon {
+      width: 28px;
+      height: 28px;
+      margin: 0 7px;
+      vertical-align: middle;
+      filter: grayscale(0.2) brightness(1.1);
+      transition: filter 0.2s, transform 0.2s;
+    }
+    .footer-icon:hover {
+      filter: grayscale(0) brightness(1.3);
+      transform: scale(1.15);
+    }
+    .footer-privacy {
+      color: #a8e063;
+      font-weight: 600;
+      text-decoration: underline;
+      margin-top: 8px;
+      display: inline-block;
+    }
+    /* Fade-in effect for sections */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+    /* تحسين تدرجات الخلفية للأقسام */
+    .section {
+      background: linear-gradient(120deg, #e6f9e0 60%, #fff 100%);
+    }
+    .section:nth-child(even) {
+      background: linear-gradient(120deg, #fff 60%, #e6f9e0 100%);
+    }
+    .navbar-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .navbar-toggle .bar {
+      width: 26px;
+      height: 3px;
+      background: #a8e063;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    @media (max-width: 900px) {
+      .navbar-container {
+        flex-direction: row;
+        padding: 0 10px;
+      }
+      .navbar-logo {
+        font-size: 1.2rem;
+      }
+      .navbar-links {
+        gap: 12px;
+      }
+    }
+    @media (max-width: 700px) {
+      .navbar-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5px;
+      }
+      .navbar-logo {
+        font-size: 1rem;
+        flex: 1;
+        text-align: center;
+      }
+      .navbar-toggle {
+        display: flex;
+      }
+      .navbar-links {
+        position: absolute;
+        top: 56px;
+        right: 0;
+        background: #22313f;
+        flex-direction: column;
+        width: 100vw;
+        max-width: 260px;
+        box-shadow: -2px 4px 16px rgba(34,49,63,0.13);
+        padding: 18px 0 18px 0;
+        gap: 0;
+        display: none;
+        z-index: 2000;
+        border-radius: 0 0 0 18px;
+      }
+      .navbar-links.open {
+        display: flex;
+      }
+      .navbar-links li {
+        margin: 0 0 10px 0;
+        text-align: right;
+      }
+      .navbar-links li a {
+        font-size: 1.1rem;
+        padding: 10px 24px;
+        display: block;
+      }
+      .profile-image-wrapper {
+        width: 90px;
+        height: 90px;
+      }
+      header h1 {
+        font-size: 1.3rem !important;
+      }
+      header p {
+        font-size: 1rem !important;
+      }
+      .header-catch {
+        font-size: 0.95rem;
+        padding: 5px 10px;
+      }
+      .header-btn, .ll {
+        font-size: 1rem;
+        padding: 12px 0;
+        width: 90vw;
+        max-width: 320px;
+        margin: 0 auto;
+        display: block;
+      }
+      .testimonials-slider {
+        max-width: 98vw;
+        min-height: 270px;
+      }
+      .testimonial {
+        max-width: 98vw;
+        padding: 15px 5px;
+      }
+      .slider-arrow {
+        width: 28px;
+        height: 28px;
+        font-size: 1.1rem;
+        left: -35px;
+        right: -35px;
+      }
+      .slider-arrow.prev { left: -35px; }
+      .slider-arrow.next { right: -35px; }
+      .dot {
+        width: 9px;
+        height: 9px;
+      }
+      .footer-social {
+        margin-bottom: 8px;
+      }
+      .footer-icon {
+        width: 22px;
+        height: 22px;
+        margin: 0 4px;
+      }
+      footer .container {
+        padding: 0 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar احترافي -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <span class="navbar-logo">جاسمين عبد العزيز</span>
+      <button class="navbar-toggle" aria-label="القائمة" onclick="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="navbar-links">
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="sessions.html">الجلسات</a></li>
+        <li><a href="#book">عن الكتاب</a></li>
+        <li><a href="#contact">تواصل</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header>
+    <div class="profile-image-wrapper profile-glow">
+      <img src="https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_9000,w_1200,f_auto,q_auto/11393792/984391_723666.png" class="profile-image" alt="صورة جاسمين">
+    </div>
+    <h1 style="font-size:2.5rem; font-weight:700; margin-bottom:10px;">جاسمين عبد العزيز</h1>
+    <p style="font-size:1.3rem; font-weight:600; margin-bottom:18px;">معالج احترافي لتحرير المشاعر</p>
+    <div class="header-cta">
+      <span class="header-catch">اكتشفي قوتك الداخلية وابدئي رحلة الشفاء الأنثوي</span>
+      <a class="btn header-btn" href="#download">حمّلي العينة المجانية</a>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">النية هي الخطوة الأولى نحو التحرر من الألم</h2>
+      <p style="text-align: center; font-size: 1.2rem;">
+        ماستر/ جاسمين عبد العزيز<br>
+        معالج لتحرير المشاعر المتسببة في الأمراض<br>
+        مستشار وعي ذاتي بالإنياجرام
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container book-content">
+      <h2 class="section-title">أنوثة مقدسة</h2>
+      <img src="https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_9000,w_1200,f_auto,q_auto/11393792/554144_841669.jpeg" alt="غلاف أنوثة مقدسة">
+      <p style="font-style: italic;">"لم تُخلق لترضي معاييركم"</p>
+      <p>
+        هذا الكتاب مرآة تعيدكِ إلى ذاتكِ، إلى صوتكِ وجسدكِ كما خلقك الله، خالياً من الخوف والعيب.
+      </p>
+
+      <div class="book-details">
+        <h3>ماذا ستجدين فيه؟</h3>
+        <ul>
+          <li>تمارين شفاء للرحم والجسد</li>
+          <li>تأملات وتمارين كتابة</li>
+          <li>قصص واقعية ملهمة</li>
+          <li>فصول عن الطفلة الداخلية والصوت والحدود</li>
+        </ul>
+      </div>
+
+      <div class="target-audience">
+        <h3>🌸 لمن هذا الكتاب؟</h3>
+        <ul>
+          <li>لكل من شعرت أنها "مش كفاية"</li>
+          <li>لكل من تحمل وجعًا صامتًا</li>
+          <li>لكل من تبحث عن حب لا يطلب منها أن تختفي</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">حمّلي جزء مجاني</h2>
+      <div class="download-form">
+        <form id="downloadForm">
+          <div class="form-group">
+            <label for="name">الاسم</label>
+            <input type="text" id="name" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="email">البريد الإلكتروني</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn">تحميل العينة</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="testimonials">
+    <div class="container">
+      <h2 class="section-title">آراء القارئات</h2>
+      <div class="testimonials-slider">
+        <div class="testimonial active">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScjTGJWbqKlLJZeg3CD_JaMRcuELwialNtTv6GKiJNCHZNfSmUqYROvHL-fUcg9U8LTR8&usqp=CAU" class="testimonial-image">
+          <h3>سارة من القاهرة</h3>
+          <p>"أحسست بأن الكتاب يحتضنني فعلاً!"</p>
+        </div>
+        <div class="testimonial">
+          <img src="https://pm1.aminoapps.com/9417/a22aac6521b75b8142168a5f946692e8c8cdad9fr1-736-832_00.jpg" class="testimonial-image">
+          <h3>ليلى من دبي</h3>
+          <p>"رجعت لحاجة كنت ناسيها جوايا."</p>
+        </div>
+        <div class="testimonial">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr5SYGJDJnIPKWmTPLQmI6n7TxPpGPvPxN3o_G3yAWlKQEkrKGZIBXvQyYVDio6--Albk&usqp=CAU" class="testimonial-image">
+          <h3>أميرة من القاهرة</h3>
+          <p>"تصالحت مع نفسي كأنثى."</p>
+        </div>
+        <button class="slider-arrow prev">&#10094;</button>
+        <button class="slider-arrow next">&#10095;</button>
+        <div class="slider-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <center><a class="ll pulse" href="https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform" target="_blank">احجزي نسختك الآن</a></center>
+
+  <footer>
+    <div class="container">
+    </div>
+  </footer>
+
+  <!-- قسم تواصل -->
+  <section id="contact" class="section" style="background: linear-gradient(120deg, #e6f9e0 60%, #fff 100%); padding-bottom: 60px;">
+    <div class="container" style="max-width: 600px; margin: 0 auto;">
+      <h2 class="section-title" style="margin-bottom: 18px;">تواصل معنا</h2>
+      <form id="contactForm" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(86,171,47,0.07); padding: 28px 18px;">
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="contactName">الاسم</label>
+          <input type="text" id="contactName" class="form-control" required style="width:100%;padding:10px;border-radius:6px;border:1px solid #ccc;">
+        </div>
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="contactEmail">البريد الإلكتروني</label>
+          <input type="email" id="contactEmail" class="form-control" required style="width:100%;padding:10px;border-radius:6px;border:1px solid #ccc;">
+        </div>
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="contactMessage">رسالتك</label>
+          <textarea id="contactMessage" class="form-control" rows="4" required style="width:100%;padding:10px;border-radius:6px;border:1px solid #ccc;"></textarea>
+        </div>
+        <div style="text-align:center;">
+          <button type="submit" class="btn" style="background:#a8e063;color:#fff;padding:12px 32px;border-radius:6px;font-weight:bold;font-size:1.1rem;">إرسال</button>
+        </div>
+      </form>
+      <div id="contactSuccess" style="display:none;text-align:center;color:#56ab2f;font-weight:bold;margin-top:18px;">تم إرسال رسالتك بنجاح! سنرد عليك قريبًا.</div>
+    </div>
+  </section>
+
+  <!-- حقوق النشر وسياسة الخصوصية -->
+  <div style="background: #2e4d1c; color: #fff; text-align: center; padding: 20px;">
+    <div class="footer-social" style="margin-bottom: 12px;">
+      <a href="https://facebook.com/" target="_blank" title="فيسبوك"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" class="footer-icon"></a>
+      <a href="https://instagram.com/" target="_blank" title="إنستجرام"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" class="footer-icon"></a>
+      <a href="https://wa.me/" target="_blank" title="واتساب"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" class="footer-icon"></a>
+    </div>
+    <p style="margin-bottom: 10px;">جميع الحقوق محفوظة © 2025</p>
+    <a href="#" style="color: #a8e063; text-decoration: underline;">سياسة الخصوصية</a>
+  </div>
+
+  <script>
+    document.getElementById('downloadForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      alert(`شكرًا ${name}، تم إرسال العينة إلى ${email}`);
+    });
+    // Testimonials Slider
+    const testimonials = document.querySelectorAll('.testimonial');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.slider-arrow.prev');
+    const nextBtn = document.querySelector('.slider-arrow.next');
+    let current = 0;
+    function showTestimonial(idx) {
+      testimonials.forEach((t, i) => {
+        t.classList.toggle('active', i === idx);
+        dots[i].classList.toggle('active', i === idx);
+      });
+      current = idx;
+    }
+    nextBtn.onclick = () => showTestimonial((current+1)%testimonials.length);
+    prevBtn.onclick = () => showTestimonial((current-1+testimonials.length)%testimonials.length);
+    dots.forEach((d, i) => d.onclick = () => showTestimonial(i));
+    // Auto-slide
+    setInterval(()=>nextBtn.click(), 5000);
+    // Fade-in on scroll
+    const fadeEls = document.querySelectorAll('.fade-in, .section');
+    function onScrollFade() {
+      fadeEls.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight-60) el.classList.add('visible');
+      });
+    }
+    window.addEventListener('scroll', onScrollFade);
+    window.addEventListener('DOMContentLoaded', onScrollFade);
+    function toggleMenu() {
+      document.querySelector('.navbar-links').classList.toggle('open');
+    }
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

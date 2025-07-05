@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الجلسات | جاسمين عبد العزيز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e6f9e0 60%, #fff 100%);
+      color: #2e4d1c;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 16px 60px 16px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(86,171,47,0.08);
+      margin-top: 40px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      color: #56ab2f;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: #f7fff3;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #e6f9e0;
+      text-align: right;
+    }
+    th {
+      background: #e6f9e0;
+      color: #2e4d1c;
+      font-weight: bold;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .actions-btn {
+      background: #a8e063;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 16px;
+      margin-left: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .actions-btn.edit { background: #56ab2f; }
+    .actions-btn.delete { background: #e74c3c; }
+    .actions-btn:hover { opacity: 0.85; }
+    .add-form {
+      background: #e6f9e0;
+      border-radius: 12px;
+      padding: 18px 14px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(86,171,47,0.07);
+    }
+    .add-form input, .add-form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .add-form label {
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: block;
+      color: #2e4d1c;
+    }
+    .add-form button {
+      background: linear-gradient(90deg, #56ab2f 40%, #a8e063 100%);
+      color: #fff;
+      font-size: 1.08rem;
+      padding: 10px 28px;
+      border-radius: 30px;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 4px 16px rgba(86,171,47,0.13);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 8px;
+    }
+    .add-form button:hover {
+      background: linear-gradient(90deg, #a8e063 0%, #56ab2f 100%);
+      transform: scale(1.04);
+    }
+    @media (max-width: 700px) {
+      .container { margin-top: 10px; padding: 10px 2px 30px 2px; }
+      table, th, td { font-size: 0.95rem; }
+      .add-form button { width: 100%; }
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>لوحة تحكم الجلسات</h1>
+    <form class="add-form" id="sessionForm">
+      <label for="title">عنوان الجلسة</label>
+      <input type="text" id="title" required>
+      <label for="desc">وصف مختصر</label>
+      <textarea id="desc" rows="2" required></textarea>
+      <label for="img">رابط صورة</label>
+      <input type="text" id="img" placeholder="مثال: حضور.webp أو رابط صورة">
+      <label for="link">رابط الحجز</label>
+      <input type="text" id="link" placeholder="رابط جوجل فورمز أو واتساب">
+      <button type="submit">إضافة جلسة</button>
+      <input type="hidden" id="editIndex">
+    </form>
+    <table id="sessionsTable">
+      <thead>
+        <tr>
+          <th>الصورة</th>
+          <th>العنوان</th>
+          <th>الوصف</th>
+          <th>رابط الحجز</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- الجلسات ستظهر هنا -->
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin:30px 0;">
+    <button id="addDefaultSessions" style="background:#56ab2f;color:#fff;padding:12px 28px;border-radius:30px;font-size:1.1rem;font-weight:bold;cursor:pointer;">إضافة الجلسات الافتراضية</button>
+  </div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHSZQpsIu_KeE0EqVPhSEj8GzDh42-dPc",
+      authDomain: "b-pr-6c81e.firebaseapp.com",
+      databaseURL: "https://b-pr-6c81e-default-rtdb.firebaseio.com",
+      projectId: "b-pr-6c81e",
+      storageBucket: "b-pr-6c81e.appspot.com",
+      messagingSenderId: "343970150309",
+      appId: "1:343970150309:web:f4a2e070cc62e8dc631a4c",
+      measurementId: "G-B27XKG94Z1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function renderSessions() {
+      db.ref('sessions').on('value', snapshot => {
+        const tbody = document.querySelector('#sessionsTable tbody');
+        tbody.innerHTML = '';
+        snapshot.forEach(child => {
+          const s = child.val();
+          const key = child.key;
+          tbody.innerHTML += `
+            <tr>
+              <td><img src="${s.img || 'sessions-images/default.webp'}" alt="صورة" style="width:50px;height:50px;border-radius:8px;object-fit:cover;"></td>
+              <td>${s.title}</td>
+              <td>${s.desc}</td>
+              <td><a href="${s.link}" target="_blank">رابط الحجز</a></td>
+              <td>
+                <button class="actions-btn edit" onclick="editSession('${key}')">تعديل</button>
+                <button class="actions-btn delete" onclick="deleteSession('${key}')">حذف</button>
+              </td>
+            </tr>
+          `;
+        });
+      });
+    }
+    function addSession(e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const desc = document.getElementById('desc').value.trim();
+      const img = document.getElementById('img').value.trim();
+      const link = document.getElementById('link').value.trim();
+      const editKey = document.getElementById('editIndex').value;
+      if(editKey) {
+        db.ref('sessions/' + editKey).set({ title, desc, img, link });
+        document.getElementById('editIndex').value = '';
+        document.querySelector('#sessionForm button[type="submit"]').textContent = 'إضافة جلسة';
+      } else {
+        db.ref('sessions').push({ title, desc, img, link });
+      }
+      document.getElementById('sessionForm').reset();
+    }
+    function editSession(key) {
+      db.ref('sessions/' + key).once('value').then(snap => {
+        const s = snap.val();
+        document.getElementById('title').value = s.title;
+        document.getElementById('desc').value = s.desc;
+        document.getElementById('img').value = s.img;
+        document.getElementById('link').value = s.link;
+        document.getElementById('editIndex').value = key;
+        document.querySelector('#sessionForm button[type="submit"]').textContent = 'حفظ التعديل';
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+    }
+    function deleteSession(key) {
+      if(!confirm('هل أنت متأكد من حذف هذه الجلسة؟')) return;
+      db.ref('sessions/' + key).remove();
+    }
+    document.getElementById('sessionForm').addEventListener('submit', addSession);
+    renderSessions();
+    window.editSession = editSession;
+    window.deleteSession = deleteSession;
+
+    // زر لإضافة الجلسات الافتراضية دفعة واحدة إلى Firebase
+    document.getElementById('addDefaultSessions').onclick = function() {
+      const defaultSessions = [
+        {
+          title: 'جلسات الحضور',
+          desc: 'عيش اللحظة وتحرر من دوامة الماضي والمستقبل. مساحة وعي وسكون داخلي.',
+          img: 'حضور.webp',
+          link: 'https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform'
+        },
+        {
+          title: 'جلسات الوعي الذاتي',
+          desc: 'اكتشف أنماطك الخفية وتواصل مع ذاتك بصدق ووضوح.',
+          img: 'الوعي الذاتي.webp',
+          link: 'https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform'
+        },
+        {
+          title: 'العلاج بالقبول والالتزام',
+          desc: 'توقف عن مقاومة مشاعرك وتعلم كيف تعيش بقبول ووعي.',
+          img: 'القبول والالزام.webp',
+          link: 'https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform'
+        },
+        {
+          title: 'فك التعلق العاطفي',
+          desc: 'افهم جذور التعلق وحرر قلبك من الاستنزاف العاطفي.',
+          img: 'التعلق.webp',
+          link: 'https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform'
+        },
+        {
+          title: 'تحرير مشاعر الرحم',
+          desc: 'حرري المشاعر المكبوتة في الرحم واستعيدي توازنك العاطفي والجسدي.',
+          img: 'مشاعر الرحم.webp',
+          link: 'https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform'
+        },
+        {
+          title: 'تحرير الخوف',
+          desc: 'اكتشف جذور الخوف وتحرر من قيوده لتعيش بحرية حقيقية.',
+          img: 'تحرير الخوف.webp',
+          link: 'https://docs.google.com/forms/d/e/1FAIpQLSev7XOx8IpEzq6rrq2VWEKGZCSgTioBCYPW1tlMf-VuWx_V4A/viewform'
+        }
+      ];
+      defaultSessions.forEach(s => db.ref('sessions').push(s));
+      alert('تمت إضافة الجلسات الافتراضية بنجاح!');
+    }
+  </script>
+</body>
+</html> 
